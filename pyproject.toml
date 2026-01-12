@@ -1,10 +1,37 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
 [project]
 name = "canlab"
 version = "0.1.0"
-description = "Add your description here"
+description = "A general CAN framework API for Python - encode/decode CAN frames, parse DBC files, and work with CAN log files"
 readme = "README.md"
 requires-python = ">=3.12"
+license = {text = "MIT"}
+authors = [
+    {name = "Peter Kwaterski"}
+]
+keywords = ["can", "dbc", "automotive", "can-bus", "frame", "encoder", "decoder"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering",
+]
 dependencies = [
     "cantools>=41.0.2",
     "polars>=1.36.1",
 ]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-cov>=4.1.0",
+]
+
+[tool.setuptools]
+packages = ["dbc", "decoder", "encoder", "exceptions", "log_reader", "conversions"]

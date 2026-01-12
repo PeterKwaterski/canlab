@@ -1,12 +1,16 @@
 import polars as pl
+from typing import List
 
-def parseASC(file_path, TARGET_IDS) -> pl.DataFrame:
+def parseASC(file_path: str, target_ids: List[int]) -> pl.DataFrame:
     """
     Parses an ASC file and extracts messages with specified IDs.
 
     Args:
-        file_path (str): Path to the ASC file.
-        TARGET_IDS (list): List of message IDs to extract.
+        file_path: Path to the ASC file.
+        target_ids: List of message IDs to extract.
+    
+    Returns:
+        pl.DataFrame: A DataFrame containing the extracted messages.
     """
     messages = []
     
@@ -21,7 +25,7 @@ def parseASC(file_path, TARGET_IDS) -> pl.DataFrame:
             can_id = parts[4].rstrip('x')
         
             message_id = int(can_id, 16)
-            if message_id not in TARGET_IDS:
+            if message_id not in target_ids:
                 continue
             dlc = int(parts[8])
             data_bytes = [int(b, 16) for b in parts[9:9+dlc]]
@@ -35,15 +39,12 @@ def read_asc(file_path: str) -> pl.DataFrame:
     with open(file_path, 'r') as file:
         for line in file:
             parts = line.strip().split()
-            print(f"Parts: {parts}")
             lineNum += 1
-            print(lineNum)
             if len(parts) < 8:
                 continue
             timestamp = float(parts[0])
             can_id = parts[2].rstrip('x')
             messageID = int(can_id, 16)
-            print(f"DLC: {parts[5]}")
             dlc = int(parts[5])
             data_bytes = [int(b, 16) for b in parts[6:6+dlc]]
             messages.append((messageID, timestamp, dlc, data_bytes))

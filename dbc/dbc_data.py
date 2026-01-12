@@ -4,13 +4,13 @@ This module provides access to the DbcData dataclass
 
 from dataclasses import dataclass
 
+from exceptions.signal_format_exception import SignalFormatException
 
 @dataclass
 class DbcData:
     """Represents the data found within a DBC Signal along with a value that has physical meaning.
 
     Attributes:
-        value: the value with physical meaning.
         startBit: the bit at which the signal starts in the CAN message.
         numBits: the number of bits the signal occupies.
         scale: the factor by which the integer in the CAN frame must be multiplied by to get one with physical meaning.
@@ -18,8 +18,8 @@ class DbcData:
         isSigned: a flag represening if the signal is signed or unsigned.
         name: the name of the signal.
         isLSB: if the signal is in LSB format
+        value: the value with physical meaning (defaults to 0.0).
     """
-    value: float
     startBit: int
     numBits: int
     scale: float
@@ -27,3 +27,8 @@ class DbcData:
     isSigned: bool
     name: str
     isLSB: bool
+    value: float = 0.0
+
+    def __post_init__(self):
+        if self.startBit + self.numBits > 64:
+            raise SignalFormatException(f"The startBit {self.startBit} and numBits {self.numBits} are not valid")

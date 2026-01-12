@@ -1,6 +1,9 @@
-from dbc.dbc_data import DbcData
+from typing import TYPE_CHECKING
 
-def phys_to_raw(sig: DbcData) -> int:
+if TYPE_CHECKING:
+    from dbc.dbc_data import DbcData
+
+def phys_to_raw(sig: "DbcData") -> int:
     raw = (sig.value - sig.offset) / sig.scale
     r = int(round(raw))
 
@@ -36,6 +39,6 @@ def gen_dbc_id(bus_id: int | str) -> int:
     dbc_id = hex(bus_id)[2:]
     if dbc_id.startswith('1'):
         dbc_id = dbc_id.replace('1', '9', 1)
-    elif dbc_id.__len__ == 3:
+    elif len(dbc_id) == 3:
         dbc_id = f'80000{dbc_id}'
     return int(dbc_id, 16)

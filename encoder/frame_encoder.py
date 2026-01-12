@@ -1,4 +1,4 @@
-"""This module contains the 
+"""This module contains the functions for encoding the physical values into a CAN frame.
 """
 
 from typing import List

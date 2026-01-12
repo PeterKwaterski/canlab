@@ -14,10 +14,10 @@ class MessageData:
     def __init__(self, dbc_id: int = None, bus_id: int = None) -> None:
         if not bus_id and not dbc_id:
             raise IDException
-        self.signals = List[DbcData]
+        self.signals: List[DbcData] = []
         self.dbc_id = dbc_id
         self.bus_id = bus_id
         if not bus_id:
-            bus_id = gen_bus_id(dbc_id)
+            self.bus_id = gen_bus_id(dbc_id)
         elif not dbc_id:
-            dbc_id = gen_dbc_id(bus_id)
+            self.dbc_id = gen_dbc_id(bus_id)

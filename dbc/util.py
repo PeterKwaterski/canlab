@@ -7,8 +7,9 @@ import os
 import sys
 from pathlib import Path
 from typing import Dict
+import cantools
 
-def clean_dbc(src_path: str, dst_path: str) -> str:
+def clean_dbc(src_path: str, dst_path: str = None) -> str:
     """
     Cleans a DBC file by removing lines not directly related to messages and signal numerics.
 
@@ -20,11 +21,11 @@ def clean_dbc(src_path: str, dst_path: str) -> str:
     """
 
     src_file_path = _resource_path(src_path)
-    if dst_path is None:
-        dst_path = src_file_path
-    dst_file_path = os.path.join(os.getcwd(), dst_path)
+    dst_file_path = os.path.join(os.getcwd(), dst_path if dst_path else src_file_path)
 
-    os.makedirs(os.path.dirname(dst_file_path), exist_ok=True)
+    dst_dir = os.path.dirname(dst_file_path)
+    if dst_dir:
+        os.makedirs(dst_dir, exist_ok=True)
 
     with open(src_file_path, 'r', encoding='utf-8') as src_file, open(dst_file_path, 'w', encoding='utf-8') as dst_file:
         for line in src_file:
@@ -34,14 +35,14 @@ def clean_dbc(src_path: str, dst_path: str) -> str:
 
     return dst_path
 
-def _resource_path(relative_path):
+def _resource_path(relative_path: str) -> str:
     try:
         base_path = sys._MEIPASS
-    except:
+    except AttributeError:
         base_path = os.path.abspath(".")
     return os.path.join(base_path, relative_path)
 
-def determine_db(messageID, dbc_list: Dict):
+def determine_db(messageID: int, dbc_list: Dict) -> cantools.database:
     """
     Determines which DBC file contains a given message ID.
 
@@ -53,12 +54,9 @@ def determine_db(messageID, dbc_list: Dict):
         KeyError: If the message ID is not found in any loaded DBC.
     """
     for path, db in dbc_list.items():
-        try:
             db.get_message_by_frame_id(messageID)
             return db
-        except Exception:
-            continue
-    raise KeyError("The Message ID is not in any loaded DB")
+    raise KeyError(f"The Message ID {messageID} is not in any loaded DB")
 
 def get_base_path():
     if getattr(sys, 'frozen', False):
