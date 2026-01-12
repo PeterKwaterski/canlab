@@ -57,3 +57,19 @@ def msb_to_value(frame: bytearray, sig: DbcData) -> float:
             raw |= ~((1 << sig.numBits) - 1)
 
     return raw * sig.scale + sig.offset
+
+def frame_to_value(frame: bytearray, sig: DbcData) -> float:
+    """Decodes the physical value using the isLSB boolean within the DbcData object
+
+    Args:
+        frame: the CAN frame ti extract a value from
+        sig: the data contained in the DBC related to the signal
+    Returns:
+        the physical value encoded in the CAN frame
+    """
+    res: float = 0.0
+    if (sig.isLSB):
+        res = lsb_to_value(frame, sig)
+    else:
+        res = msb_to_value(frame, sig)
+    return res

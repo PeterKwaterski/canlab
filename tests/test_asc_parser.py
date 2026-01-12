@@ -12,7 +12,7 @@ class TestParseASC:
     @pytest.mark.unit
     def test_parse_asc_basic(self, sample_asc_path):
         """Test parsing a basic ASC file."""
-        target_ids = [0x100, 0x200]
+        target_ids = [419384053, 419382517]
         df = parseASC(str(sample_asc_path), target_ids)
         
         assert df is not None
@@ -35,7 +35,7 @@ class TestParseASC:
     @pytest.mark.unit
     def test_parse_asc_with_x_suffix(self, sample_asc2_path):
         """Test parsing ASC file with 'x' suffix on CAN IDs."""
-        target_ids = [0x100, 0x200]
+        target_ids = [419384053, 419382517]
         df = parseASC(str(sample_asc2_path), target_ids)
         
         assert df is not None

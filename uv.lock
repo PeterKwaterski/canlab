@@ -44,8 +44,8 @@ wheels = [
 
 [[package]]
 name = "canlab"
-version = "0.1.0"
-source = { virtual = "." }
+version = "0.1.2"
+source = { editable = "." }
 dependencies = [
     { name = "cantools" },
     { name = "polars" },

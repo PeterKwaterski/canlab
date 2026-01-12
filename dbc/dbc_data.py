@@ -28,6 +28,8 @@ class DbcData:
     name: str
     isLSB: bool
     value: float = 0.0
+    is_multiplexor: bool = False
+    multiplexor_value: int | None = None
 
     def __post_init__(self):
         if self.startBit + self.numBits > 64:

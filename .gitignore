@@ -212,3 +212,5 @@ __marimo__/
 base.py
 zap.py
 todo.md
+/logs/
+/local_dbc/

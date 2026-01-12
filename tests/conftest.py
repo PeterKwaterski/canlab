@@ -8,7 +8,7 @@ import pytest
 @pytest.fixture
 def test_data_dir():
     """Return the path to the test data directory."""
-    return Path(__file__).parent / "data"
+    return Path(__file__).parent.parent / "logs/CombinedASC"
 
 
 @pytest.fixture
@@ -20,10 +20,10 @@ def sample_dbc_path(test_data_dir):
 @pytest.fixture
 def sample_asc_path(test_data_dir):
     """Return the path to the sample ASC file."""
-    return test_data_dir / "sample.asc"
+    return test_data_dir / "test.asc"
 
 
 @pytest.fixture
 def sample_asc2_path(test_data_dir):
     """Return the path to the second sample ASC file."""
-    return test_data_dir / "sample2.asc"
+    return test_data_dir / "test2.asc"

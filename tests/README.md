@@ -2,6 +2,8 @@
 
 This directory contains the test suite for the canlab library.
 
+**BEFORE RUNNING:** See GitHub Issues relating to tests
+
 ## Running Tests
 
 ### Install Test Dependencies

@@ -37,23 +37,35 @@ def extract_messages(src_path: str) -> List[MessageData]:
         The messages with their signals contained within the DBC.
     """
     messages: List[MessageData] = []
+    curr_line: str = ''
     try:
         with open(src_path, 'r') as dbc:
             current_message = None
             for line in dbc:
-                if(line.startswith("BO_")):
+                curr_line = line
+                if(curr_line.startswith("BO_")):
                     if current_message is not None:
                         messages.append(current_message)
-                    message = line.split()
+                    message = curr_line.split()
                     current_message = MessageData(dbc_id=int(message[1]))
-                elif ("SG_" in line and current_message != None):
-                    signal = line.split()
+                elif ("SG_" in curr_line and current_message != None):
+                    signal = curr_line.split()
                     block_data = signal[3]
+                    transform_data = signal[4]
+                    if signal[3] == ('M'):
+                        block_data = signal[4]
+                        transform_data = signal[5] 
+                        sig_data.is_multiplexor = True
+                    elif 'm' in signal[3]:
+                        mux_value_str = signal[3][1:]
+                        sig_data.multiplexor_value = int(mux_value_str)
+                        transform_data = signal[5]
+                        block_data = signal[4]
+
                     start_bit_str = block_data[:block_data.index('|')]
                     num_bits_str = block_data[block_data.index('|') + 1 : block_data.index('@')]
                     is_lsb = True if block_data[block_data.index('@') + 1] == '1' else False
                     is_signed = True if block_data[block_data.index('@') + 2] == '-' else False
-                    transform_data = signal[4]
                     scale_str = transform_data[1:transform_data.index(',')]
                     offset_str = transform_data[transform_data.index(',') + 1 : transform_data.index(')')]
                     
@@ -76,3 +88,5 @@ def extract_messages(src_path: str) -> List[MessageData]:
         raise FileNotFoundError(f"The file {src_path} was not found") from e
     except IndexError:
         raise DbcException
+    except ValueError:
+        print(f"")

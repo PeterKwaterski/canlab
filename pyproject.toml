@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "canlab"
-version = "0.1.0"
+version = "0.1.2"
 description = "A general CAN framework API for Python - encode/decode CAN frames, parse DBC files, and work with CAN log files"
 readme = "README.md"
 requires-python = ">=3.12"
@@ -34,4 +34,4 @@ dev = [
 ]
 
 [tool.setuptools]
-packages = ["dbc", "decoder", "encoder", "exceptions", "log_reader", "conversions"]
+packages = ["canlab", "dbc", "conversions", "decoder", "encoder", "exceptions", "log_reader"]
